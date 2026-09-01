@@ -127,10 +127,31 @@ In my (the guide creator) opinion the best method for saving is simply using `JS
 
 Note that the load function will be called immediately after your init function.
 
-## 2.4. Localization
+## 2.4 Mod loading
+How your user loads your mod depends on the platform and tools used. Here is a simple table detailing the methods:
+
+| Platform | Method name | Description |
+| ----- | ----- | ----------------- |
+| Steam | Steam Workshop | Refer to the `README.txt` found in the `mods/` folder of your copy. |
+| Browser | Console | Given a short script containing `Game.LoadMod`, paste it into the developer console and press enter. A link is needed. |
+| Browser | Bookmarklet | Given a short script starting with `javascript:` and a `Game.LoadMod` with your mod link, create a bookmark and paste the script into the URL field. |
+| Browser | Mod loader extension | Using the Cookie Clicker Mod Manager (CCMM) extension, load the mod with a proper link that will be fed to `Game.LoadMod`. |
+| Browser (with mod loader) | Userscripts | Using the Tampermonkey or Greasemonkey extension, define a userscript that either contains a `Game.LoadMod` to the mod, or the mod's code. |
+
+Note that for many of these methods you will need a link to your mod's code. The link needs to have the right MIME header. Two popular ways to serve this file are:
+- Github Pages: enable Github Pages on your Github repository and use the link `https://your-name.github.io/your-repo-name/mod-file-name.js`.
+- Glander API: (recommended for small unimportant mods only) upload your mod's code onto [pastebin](https://pastebin.com) and get the ID of your paste (present in the URL, like the `WSdRdqx2` of `https://pastebin.com/WSdRdqx2`), then append the ID to `https://glander.club/asjs/`. 
+
+For the console and bookmarklet methods, you can use the same code. A working snippet is 
+```js
+javascript:(function(){Game.LoadMod('https://example.com');})()
+```
+(replace `https://example.com` with your mod's link)
+
+## 2.5. Localization
 If you are not planning on your mods becoming translated across multiple languages **ever**, then you can ignore this part. However, if you plan on localizing your mods at any point in the future, it's best to start the process now so you don't have to do a bunch of menial work later. 
 
-### 2.4.1 Localization mechanics
+### 2.5.1 Localization mechanics
 The game applies localization via the `loc` function. It takes in a string that includes placeholder tokens to be replaced (like `%1`), and the actual values to replace the placeholder tokens in an array as its second argument, and returns the localized string. The function looks up the corresponding string in a localization table, and if it doesn't find it, it returns the original string (and will not replace any placeholder tokens!). Therefore, if you were to use the localization system, it is imperative that all strings that are passed to the function are present in the localization table.
 
 The localization table is a JS object with the following structure:
@@ -142,7 +163,9 @@ The localization table is a JS object with the following structure:
     ...
 }
 ```
-It is passed into the function `AddLanguage`. You can get the current language with the expression `(localStorageGet('CookieClickerLang') ?? 'EN')`. If you register a language as a mod make sure that the fourth argument is `true`.
+It is passed into the function `AddLanguage` alongside the target language. If you specify a preexisting language the strings will be added to that language's table. 
+
+You can get the current language with the expression `(localStorageGet('CookieClickerLang') ?? 'EN')`. If you register a language as a mod make sure that the fourth argument is `true`.
 
 ## 3. Resources
 You can see some examples of basic mods in the `examples/` folder.
