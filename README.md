@@ -168,5 +168,7 @@ It is passed into the function `AddLanguage` alongside the target language. If y
 You can get the current language with the expression `(localStorageGet('CookieClickerLang') ?? 'EN')`. If you register a language as a mod make sure that the fourth argument is `true`.
 
 ## 3. Resources
+There is a premade types file for the game's API in `main.d.ts`. Note that it is for the game version `2.052`. 
+
 You can see some examples of basic mods in the `examples/` folder.
 (ill add more later)
