@@ -97,7 +97,7 @@ Wrapping can do many things, but it is not as powerful as injections. Notice how
 So, which one should you use? It often comes down to preference and the specific use case. I hope that the following comparison table can help you make your choice:
 
 | Aspect | Injections | Wrapping |
-| ------ | ---------- | -------- |
+| ------ | ------------ | ------------ |
 | Capability | Can do virtually anything | Can only inject code to be called at the start or end of functions |
 | Safety | Is often considered less safe, as game updates can easily break injections | Harder to break or encounter bugs as behavior is more predictable |
 | Compatibility | Less compatible: other mods injecting may cause your injections to falter; you cannot inject a wrapped function | More compatible: you can wrap already wrapped functions or already injected functions |
