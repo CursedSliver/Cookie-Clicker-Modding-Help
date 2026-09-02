@@ -33,6 +33,7 @@ The important files are:
 1. `main.js`: Contains the vast majority of the game's logic apart from the minigames.
 2. `index.html`: The entrypoint, containing the baseline HTML for the game.
 3. `style.css`: The CSS for the game.
+In addition, all files starting with `minigame` are minigame-related code (e.g. `minigameGarden.js`) and may be useful if you want to interface with them or make your own minigames.
 
 ### 1.3. Loading your mod
 No great mod is made without testing. To test your mod, you must at least run the game. While you can do this by directly opening `index.html`, the game does not update as you edit the code, and you will need to refresh the page each time you make a change (and you will run into tons of cache related headaches). A better way to do this is via the `live server` extension for VS Code. Simply install it and you can use the "Go live" button at bottom-right to open a copy of the game, and it has the benefit that it will automatically reload when you make any changes.
@@ -50,7 +51,7 @@ var PRESETMODS = ['mod.js'];
 4. Go live, making sure the page is refreshed.
 5. Open the developer console. You should see `Hello, world!`. If so, you have successfully loaded your mod!
 
-This is not how you will load mods in the final game, but it is a good way to test your mod. The guide will elaborate on how mods are actually loaded later on.
+This is **not** how you will load mods in the final game, but it is a good way to test your mod. The guide will elaborate on how mods are actually loaded later on.
 
 ## 2, Programming and CC
 
@@ -60,12 +61,13 @@ Cookie Clicker uses an almost entirely monolithic structure (all the code in the
 The game provides a simplistic modding interface with two parts:
 - `Game.registerMod`: call this function with the proper inputs to register the mod and use the modding interface. This is paramount for a steam mod but is not necessarily required for a browser-only mod (but highly recommended!)
 - `Game.registerHook`: offers a slight variety of hooks to allow your own functions to be called when the game does certain specific things. Useful hooks include: `'logic'`, `'check'`, `'reset'`, though there are more.
-For more details, check line **1,000** of `main.js`. (yes, it is not rounded)
+For more details, check line **1,000** of `main.js`. (yes, it is not rounded) The modding API is very bare bnoes and anything else will require injections or wrapping (see 2.2) - for anything decent, the main purpose of the `Game.registerHook` is to put a place to store your mod data.
 
 Other than the modding API, the game's codebase is not very well documented; and the best way to learn how to interface with the game functions is to read the codebase and try to figure out how to do things yourself. Here are some tips to do so:
 - Use Ctrl+F: Opens a search bar. Whenever you see an unknown function or variable, search it up. You can also use the "Go to definition" utility by right clicking on the variable, though due to JavaScript's volatile nature, it may not always work. An extension like Naive Definitions may help with this.
 - Use the developer console to test things out. It is genuinely the fastest way to interface with the game.
 - When trying to link an in-game element to code, search for its content, element ID, or class name. 
+Important files include `main.js` and anything starting with `minigame` (e.g. `minigameGarden.js`).
 
 ## 2.2. Injections vs wrapping
 You can't always do everything with just your own code and hooks provided by the game. Sometimes you need to inject your own code into the game's codebase. There are two main ways to do this:
@@ -84,13 +86,23 @@ Game.CalculateGains = new Function('return ' + Game.CalculateGains.toString().re
 This has the advantage of being situated in the global scope, which is better for bundlers (if you don't know what that is, disregard it).
 
 ### 2.2.2. Wrapping
-Wrapping is a less powerful way to modify the game, but it is also more straightforward. It is also the most common way to modify the game. Let's say you want to increase your click power by 50%. You can do this by wrapping the vanilla function:
+Wrapping is a less powerful way to modify the game, but it is also more straightforward. Examine the following code:
+```js
+Game.mouseCps = function() {
+    console.log('Mouse CPS computed!');
+}
+```
+The code assigns a function to the variable `Game.mouseCps` which happens to be a method. When the game tries to call the method `Game.mouseCps`, because you have assigned it to your own function, it will instead call your function and not the game's one, resulting in `Mouse CPS computed!` being logged. If you then store the original function in a variable, you can call it later to restore the original behavior.
+
+Let's say you want to increase your click power by 50%. You can do this by wrapping the vanilla function:
 ```js
 const original = Game.mouseCps;
 Game.mouseCps = function() {
     return original() * 1.5;
 }
 ```
+For testing, you can also disregard storing the original function and just copy paste the function definition inside the wrapping function to modify, but this is highly not recommended for production.
+
 Wrapping can do many things, but it is not as powerful as injections. Notice how you can't really modify the first kitten to be twice as powerful here, because you cannot access the inner workings of the original function.
 
 ### 2.2.3. Injections vs wrapping
@@ -168,7 +180,7 @@ It is passed into the function `AddLanguage` alongside the target language. If y
 You can get the current language with the expression `(localStorageGet('CookieClickerLang') ?? 'EN')`. If you register a language as a mod make sure that the fourth argument is `true`.
 
 ## 3. Resources
-There is a premade types file for the game's API in `main.d.ts`. Note that it is for the game version `2.052`. 
+There is a premade types file for the game's API in this repository's `types/` folder. There's one for `2.053` (steam) and one for `2.058` (web). It comes from [DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/cookieclicker/index.d.ts). You can also install it via `npm install @types/cookieclicker`.
 
 You can see some examples of basic mods in the `examples/` folder.
 (ill add more later)
