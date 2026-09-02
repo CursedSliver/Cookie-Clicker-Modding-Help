@@ -85,6 +85,21 @@ Game.CalculateGains = new Function('return ' + Game.CalculateGains.toString().re
 ```
 This has the advantage of being situated in the global scope, which is better for bundlers (if you don't know what that is, disregard it).
 
+Injections will destroy the closure of the original function. That means if you run the following code and try to inject into `Game.test2`:
+```js
+function test() {
+    const hello = 'world';
+    Game.test2 = function() {
+        console.log(hello);
+    }
+}
+test();
+```
+Calling the modified `Game.test2` will get `undefined`, not `"world"`. To fix this, you will need to declare the same variable in the same space before you did the injection. An example would be (using the Function constructor method):
+```js
+Game.test2 = new Function('hello', 'return '+Game.test2.toString()+';')('world');
+```
+
 ### 2.2.2. Wrapping
 Wrapping is a less powerful way to modify the game, but it is also more straightforward. Examine the following code:
 ```js
