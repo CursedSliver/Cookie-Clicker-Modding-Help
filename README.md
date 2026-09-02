@@ -26,7 +26,7 @@ This guide assumes that you already know some programming. If not, you should le
 
 Now, if you do not already have one, you should download an IDE, which will provide a code editor and a way to test your mod easily. You can use whatever you want but this guide will use Visual Studio Code (VS Code) for its popularity. If you use another IDE, you would need to discover some things yourself.
 
-To mod the game you first need a copy of the game's code. You can find a copy of the code on the [OZH's GitHub](https://github.com/ozh/cookieclicker). Git clone it onto your computer with the "Clone repository" option. The codebase should look something like this:
+To mod the game you first need a copy of the game's code. You can find a copy of the code on the [OZH's GitHub](https://github.com/ozh/cookieclicker). Git clone it onto your computer with the "Clone Git repository" option. The codebase should look something like this:
 ![Codebase](images/codebase.png)
 
 The important files are:
