@@ -94,6 +94,9 @@ function test() {
     }
 }
 test();
+
+// Now modify Game.test2
+Game.test2 = new Function('return '+Game.test2.toString()+';')();
 ```
 Calling the modified `Game.test2` will get `undefined`, not `"world"`. To fix this, you will need to declare the same variable in the same space before you did the injection. An example would be (using the Function constructor method):
 ```js
