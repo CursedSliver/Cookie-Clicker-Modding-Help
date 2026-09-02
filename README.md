@@ -197,5 +197,9 @@ You can get the current language with the expression `(localStorageGet('CookieCl
 ## 3. Resources
 There is a premade types file for the game's API in this repository's `types/` folder. There's one for `2.053` (steam) and one for `2.058` (web). It comes from [DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/cookieclicker/index.d.ts). You can also install it via `npm install @types/cookieclicker`.
 
+For any further questions, you can try asking the [Cookie Clicker Discord](https://discord.gg/cookie) in the **#dashnet-modding** channel.
+
 You can see some examples of basic mods in the `examples/` folder.
 (ill add more later)
+
+Guide made by CursedSliver.
