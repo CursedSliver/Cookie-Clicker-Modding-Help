@@ -119,6 +119,13 @@ Game.mouseCps = function() {
     return original() * 1.5;
 }
 ```
+If the function requires arguments, you would also need to declare the same arguments in your wrapper and pass them into the original function. Like so:
+```js
+const original = Game.sayTime;
+Game.sayTime = function(time) {
+    return original(time) + '!';
+}
+```
 For testing, you can also disregard storing the original function and just copy paste the function definition inside the wrapping function to modify, but this is highly not recommended for production.
 
 Wrapping can do many things, but it is not as powerful as injections. Notice how you can't really modify the first kitten to be twice as powerful here, because you cannot access the inner workings of the original function.
@@ -198,7 +205,7 @@ It is passed into the function `AddLanguage` alongside the target language. If y
 You can get the current language with the expression `(localStorageGet('CookieClickerLang') ?? 'EN')`. If you register a language as a mod make sure that the fourth argument is `true`.
 
 ## 3. Resources
-There is a premade types file for the game's API in this repository's `types/` folder. There's one for `2.053` (steam) and one for `2.058` (web). It comes from [DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/cookieclicker/index.d.ts). You can also install it via `npm install @types/cookieclicker`.
+You can also install type definitions for the base game via `npm install @types/cookieclicker` (highly recommended). There are also premade types files for the game's API in this repository's `types/` folder. There's one for `2.053` (steam) and one for `2.058` (web). It comes from [DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/cookieclicker/index.d.ts). 
 
 For any further questions, you can try asking the [Cookie Clicker Discord](https://discord.gg/cookie) in the **#dashnet-modding** channel.
 
