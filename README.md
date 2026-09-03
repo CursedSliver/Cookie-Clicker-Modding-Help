@@ -163,6 +163,8 @@ The game uses several utility functions regularly, which you may find useful in 
 | `randomFloor(number)` | Randomly floors or ceils the input based on how close the input is to its floored value. For instance, `randomFloor(2.3)` has a 0.3 (30%) chance to return 2 and a 0.7 (70%) chance to return 3. | `number` | `number` |
 | `loc(string, placeholders)` | See the Localization section further down this page. | `string`, `undefined &#124 Array` | `string` |
 
+Other base game API includes: `Game.Notify`, `Game.Prompt`, `Game.getTooltip`, `Game.getDynamicTooltip`.
+
 #### 2.3.2. The environment is unreliable
 `PRESETMODS` is a very special variable that is used to load mods before the game is ready, in similar fashion to Steam. However, this will not always be the case - very often, your users (mainly people who play on the browser) will find themselves loading your mod after the game is ready, where you will lose any and all benefits from being able to access the game's state pre-load. Even if you decide that you will only mod for Steam, script load timings are not guaranteed to be the same, and you should not rely on them. Always assume that your mod will be loaded at any time.
 
