@@ -79,15 +79,19 @@ Important files include `main.js` and anything starting with `minigame` (e.g. `m
 You can't always do everything with just your own code and hooks provided by the game. Sometimes you need to inject your own code into the game's codebase. There are two main ways to do this:
 
 ### 2.2.1. Injections
-Injections are the most capable way to modify the game, it can inject code and it can also modify existing code, but it isn't always the best. Let's say you want to inject into `Game.CalculateGains` to make the first kitten twice as powerful. One of the most popular ways to do this is:
+Injections are the most capable way to modify the game, it can inject code and it can also modify existing code, but it isn't always the best.
+
+`eval` is a function that lets you execute code from a string. Let's say you want to inject into `Game.CalculateGains` to make the first kitten twice as powerful. One of the most popular ways to do this is:
 ```js
+// Game.CalculateGains.toString() gets its function definition as written in the game files.
 eval('Game.CalculateGains='+Game.CalculateGains.toString().replace(`if (Game.Has('Kitten helpers')) catMult*=(1+Game.milkProgress*0.1*milkMult);`, `if (Game.Has('Kitten helpers')) catMult*=(1+Game.milkProgress*0.2*milkMult);`));
 ```
 You can do injections similarly by just copying code to identify the place you want to inject at, then append your own code to the end of the vanilla code. 
 
-An alternate and lesser-known way to inject is with the `Function` constructor. Like so:
+An alternate and lesser-known way to inject is with the `Function` constructor. The `Function` constructor allows you to create a function from a string. You can inject like so:
 ```js
 Game.CalculateGains = new Function('return ' + Game.CalculateGains.toString().replace(`if (Game.Has('Kitten helpers')) catMult*=(1+Game.milkProgress*0.1*milkMult);`, `if (Game.Has('Kitten helpers')) catMult*=(1+Game.milkProgress*0.2*milkMult);`) + ';')();
+// Notice the () at the end of the line - it calls the function created by the Function constructor immediately.
 ```
 This has the advantage of being situated in the global scope, which is better for bundlers (if you don't know what that is, disregard it).
 
