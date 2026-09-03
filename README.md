@@ -159,9 +159,9 @@ The game uses several utility functions regularly, which you may find useful in 
 | `Beautify(value, precision)` | Parses a number by adding commas, and adds a postfix (e.g. `1000000000` => `1 billion`) whenever applicable. The `precision` argument specifies how much to round. | `number`, `number` | `string` |
 | `SimpleBeautify(value)` | Like `Beautify`, but only adds commas to the input. | `number` | `string` | 
 | `choose(array)` | Returns one random element within the array. | `any[]` | `any` |
-| `Game.sayTime(time, detail)` | Takes in a time in amount of frames (default 30 frames/second) and returns a human-readable string. The `detail` skips days when >1, hours when >2, minutes when >3 and seconds when >4, skips none when it is `-1`. | `number`, `-1 &#124 2 &#124 3 &#124 4 &#124 5` | `string` |
+| `Game.sayTime(time, detail)` | Takes in a time in amount of frames (default 30 frames/second) and returns a human-readable string. The `detail` skips days when >1, hours when >2, minutes when >3 and seconds when >4, skips none when it is `-1`. | `number`, `-1 \| 2 \| 3 \| 4 \| 5` | `string` |
 | `randomFloor(number)` | Randomly floors or ceils the input based on how close the input is to its floored value. For instance, `randomFloor(2.3)` has a 0.3 (30%) chance to return 2 and a 0.7 (70%) chance to return 3. | `number` | `number` |
-| `loc(string, placeholders)` | See the Localization section further down this page. | `string`, `undefined &#124 Array` | `string` |
+| `loc(string, placeholders)` | See the Localization section further down this page. | `string`, `undefined \| Array` | `string` |
 
 Other base game API includes: `Game.Notify`, `Game.Prompt`, `Game.getTooltip`, `Game.getDynamicTooltip`.
 
