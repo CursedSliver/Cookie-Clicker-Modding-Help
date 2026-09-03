@@ -237,4 +237,4 @@ For any further questions, you can try asking the [Cookie Clicker Discord](https
 You can see some examples of basic mods in the `examples/` folder.
 (ill add more later)
 
-Guide made by CursedSliver.
+Guide made by CursedSliver. Special thanks to staticvariablejames for giving feedback.
