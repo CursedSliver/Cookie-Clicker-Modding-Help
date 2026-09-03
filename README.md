@@ -53,6 +53,12 @@ var PRESETMODS = ['mod.js'];
 
 This is **not** how you will load mods in the final game, but it is a good way to test your mod. The guide will elaborate on how mods are actually loaded later on.
 
+### 1.4. Learning JavaScript
+Here are some helpful resources for learning JavaScript:
+- [W3Schools' JavaScript tutorial](https://www.w3schools.com/js/default.asp)
+- [Mozilla's JavaScript documentation](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+- [Codecademy's JavaScript course](https://www.codecademy.com/learn/introduction-to-javascript)
+
 ## 2, Programming and CC
 
 ## 2.1. The CC source code
@@ -144,17 +150,30 @@ So, which one should you use? It often comes down to preference and the specific
 ### 2.3. Other programming notes
 At this point you should already know some JavaScript. However, the game is rather janky sometimes, so here are some important details to keep in mind when starting your first mod:
 
-#### 2.3.1. The environment is unreliable
+#### 2.3.1. Useful native functions
+The game uses several utility functions regularly, which you may find useful in your modding journey. Some of them are especially relevant as functions that output standardized output, allowing parts of your mod to match some base game conventions.
+
+| Function | Description | Input types | Output types |
+| -------- | ----------- | ----------- | ------------ |
+| `l(id)`  | Equivalent to `document.getElementById`. | `string` | `HTMLElement` |
+| `Beautify(value, precision)` | Parses a number by adding commas, and adds a postfix (e.g. `1000000000` => `1 billion`) whenever applicable. The `precision` argument specifies how much to round. | `number`, `number` | `string` |
+| `SimpleBeautify(value)` | Like `Beautify`, but only adds commas to the input. | `number` | `string` | 
+| `choose(array)` | Returns one random element within the array. | `any[]` | `any` |
+| `Game.sayTime(time, detail)` | Takes in a time in amount of frames (default 30 frames/second) and returns a human-readable string. The `detail` skips days when >1, hours when >2, minutes when >3 and seconds when >4, skips none when it is `-1`. | `number`, `-1 &#124 2 &#124 3 &#124 4 &#124 5` | `string` |
+| `randomFloor(number)` | Randomly floors or ceils the input based on how close the input is to its floored value. For instance, `randomFloor(2.3)` has a 0.3 (30%) chance to return 2 and a 0.7 (70%) chance to return 3. | `number` | `number` |
+| `loc(string, placeholders)` | See the Localization section further down this page. | `string`, `undefined &#124 Array` | `string` |
+
+#### 2.3.2. The environment is unreliable
 `PRESETMODS` is a very special variable that is used to load mods before the game is ready, in similar fashion to Steam. However, this will not always be the case - very often, your users (mainly people who play on the browser) will find themselves loading your mod after the game is ready, where you will lose any and all benefits from being able to access the game's state pre-load. Even if you decide that you will only mod for Steam, script load timings are not guaranteed to be the same, and you should not rely on them. Always assume that your mod will be loaded at any time.
 
 You can check for whether the game has been completely loaded with the following code: `typeof Game !== 'undefined' && Game && Game.ready`. 
 
-#### 2.3.2. Don't pollute the global namespace
+#### 2.3.3. Don't pollute the global namespace
 As tempting as it is to write 20 `var` variables at the top of your mod as your state keeping, this is not a great idea - it increases the chance of namespace collisions from different mods and does not really make it easier to keep track of your state. Instead, you should use an object and put all your state in it. There are two good ways to do this:
 1. Put all of your state and methods inside the `Game.registerMod` mod object. The `this` keyword is bound to the entire mod object as long as you don't involve event listeners or other async methods. This way you do not have to create an object yourself, and you can access your state and methods from anywhere in the game. You can then attach this mod object to the global scope with something like `window.myMod = this` in `init` to bypass the event listener problem.
 2. Create a new object on the global scope and put all of your state and methods in it. You can then use `Game.registerMod` to register your mod separately, but only interface with your new object. This method is event-listener-proof (as all references use the global object instead of an ephermeal `this`), but you have to manage two parallel systems at once (the global object and the mod object).
 
-### 2.3.3. Saving format
+### 2.3.4. Saving format
 Saving and loading is one of the most difficult parts of making a mod as the process is highly async, and a bad system will make continued development exceedingly difficult as you go on. 
 
 In my (the guide creator) opinion the best method for saving is simply using `JSON.stringify` and `JSON.parse` with selective fields; and only compress highly repetitive fields that are unlikely to change. While this may seem like using a lot of storage space, the following reasons may persuade you otherwise:
